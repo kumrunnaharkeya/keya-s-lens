@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a0a14">
+<title>PCOD Guide & Tracker — HealthLoop</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0a12;
+  --bg2: #1a1020;
+  --surface: #221530;
+  --surface2: #2d1d3e;
+  --border: rgba(255,150,180,0.12);
+  --border2: rgba(255,150,180,0.22);
+  --text: #faf0f4;
+  --text2: #c9a8be;
+  --muted: #886677;
+  --rose: #e8607a;
+  --rose-l: rgba(232,96,122,0.12);
+  --rose-d: #c43f5a;
+  --blush: #f4a0b4;
+  --lavender: #b8a0d8;
+  --lav-l: rgba(184,160,216,0.12);
+  --sage: #7dc4a0;
+  --sage-l: rgba(125,196,160,0.12);
+  --amber: #e8a060;
+  --amber-l: rgba(232,160,96,0.12);
+  --font: 'DM Sans', sans-serif;
+  --serif: 'Playfair Display', Georgia, serif;
+  --r: 16px;
+  --r2: 24px;
+  --sh: 0 4px 24px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+
+/* ── NOISE TEXTURE ── */
+body::before { content:''; position:fixed; inset:0; background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.5; }
+
+/* ── NAV ── */
+nav { position: sticky; top: 0; z-index: 100; background: rgba(15,10,18,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 58px; }
+.nav-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--blush); }
+.nav-logo span { color: var(--rose); }
+.nav-links { display: flex; gap: 6px; }
+.nav-link { background: none; border: none; color: var(--text2); font-family: var(--font); font-size: 12px; font-weight: 500; cursor: pointer; padding: 6px 12px; border-radius: 20px; transition: all 0.2s; }
+.nav-link:hover { background: var(--rose-l); color: var(--blush); }
+.nav-link.active { background: var(--rose-l); color: var(--rose); }
+
+/* ── HERO ── */
+.hero { position: relative; padding: 80px 24px 64px; max-width: 680px; margin: 0 auto; text-align: center; }
+.hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--rose); margin-bottom: 16px; }
+.hero-title { font-family: var(--serif); font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.15; margin-bottom: 20px; }
+.hero-title em { color: var(--blush); font-style: italic; }
+.hero-sub { font-size: 1rem; color: var(--text2); max-width: 480px; margin: 0 auto 32px; line-height: 1.75; }
+.hero-cta { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.btn-primary { background: linear-gradient(135deg, var(--rose), var(--rose-d)); color: #fff; border: none; border-radius: 30px; padding: 13px 28px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(232,96,122,0.35); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(232,96,122,0.5); }
+.btn-secondary { background: var(--surface); border: 1px solid var(--border2); color: var(--blush); border-radius: 30px; padding: 13px 28px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-secondary:hover { background: var(--surface2); }
+.hero-orbs { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.18; }
+.orb1 { width: 300px; height: 300px; background: var(--rose); top: -80px; right: -60px; }
+.orb2 { width: 200px; height: 200px; background: var(--lavender); bottom: 0; left: -40px; }
+
+/* ── SECTIONS ── */
+section { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+.section-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rose); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.section-tag::before { content:''; display:inline-block; width:20px; height:1px; background:var(--rose); }
+.section-title { font-family: var(--serif); font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.2; margin-bottom: 14px; }
+.section-title em { color: var(--blush); font-style: italic; }
+.section-lead { color: var(--text2); font-size: 0.92rem; line-height: 1.75; margin-bottom: 28px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── WHAT IS PCOD GRID ── */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); padding: 22px; transition: border-color 0.2s; }
+.info-card:hover { border-color: var(--border2); }
+.info-card-ico { font-size: 28px; margin-bottom: 12px; }
+.info-card-title { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 8px; color: var(--blush); }
+.info-card-body { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+/* ── SYMPTOMS ── */
+.symptom-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.symptom-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; display: flex; align-items: flex-start; gap: 11px; }
+.symptom-ico { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.symptom-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.symptom-text strong { color: var(--text); display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+
+/* ── INSULIN RESISTANCE ── */
+.insulin-flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 24px; }
+.insulin-step { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+.insulin-step:last-child { border-bottom: none; }
+.insulin-num { width: 32px; height: 32px; border-radius: 50%; background: var(--rose-l); border: 1px solid rgba(232,96,122,0.3); color: var(--rose); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.insulin-content h4 { font-size: 14px; font-weight: 600; color: var(--blush); margin-bottom: 4px; }
+.insulin-content p { font-size: 13px; color: var(--text2); line-height: 1.65; }
+.insulin-highlight { background: linear-gradient(135deg, rgba(232,96,122,0.08), rgba(184,160,216,0.08)); border: 1px solid var(--border); border-radius: var(--r2); padding: 20px; margin-top: 16px; }
+.insulin-highlight p { font-size: 13px; color: var(--text2); line-height: 1.75; }
+.insulin-highlight strong { color: var(--blush); }
+
+/* ── DO / DON'T ── */
+.dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width: 520px) { .dos-donts { grid-template-columns: 1fr; } }
+.do-card, .dont-card { background: var(--surface); border-radius: var(--r2); padding: 20px; }
+.do-card { border: 1px solid rgba(125,196,160,0.25); }
+.dont-card { border: 1px solid rgba(232,96,122,0.25); }
+.dos-donts-title { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+.do-card .dos-donts-title { color: var(--sage); }
+.dont-card .dos-donts-title { color: var(--rose); }
+.dd-list { display: flex; flex-direction: column; gap: 9px; }
+.dd-item { display: flex; gap: 9px; font-size: 13px; color: var(--text2); line-height: 1.55; align-items: flex-start; }
+.dd-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.do-card .dd-item::before { background: var(--sage); }
+.dont-card .dd-item::before { background: var(--rose); }
+
+/* ── TRACKER SECTION ── */
+.tracker-toggle-card { background: linear-gradient(135deg, #1e0f2a, #2a1040); border: 1px solid var(--border); border-radius: var(--r2); padding: 28px; margin-bottom: 20px; }
+.tracker-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.tracker-title-group h3 { font-family: var(--serif); font-size: 1.3rem; color: var(--blush); margin-bottom: 5px; }
+.tracker-title-group p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.toggle-pill { display: flex; align-items: center; gap: 10px; }
+.toggle-lbl { font-size: 12px; color: var(--text2); font-weight: 500; }
+.toggle-switch { position: relative; width: 52px; height: 28px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-knob { position: absolute; inset: 0; background: var(--surface2); border-radius: 28px; cursor: pointer; transition: 0.3s; border: 1px solid var(--border2); }
+.toggle-knob::before { content: ''; position: absolute; width: 22px; height: 22px; left: 2px; top: 2px; background: var(--muted); border-radius: 50%; transition: 0.3s; }
+.toggle-switch input:checked + .toggle-knob { background: rgba(232,96,122,0.25); border-color: var(--rose); }
+.toggle-switch input:checked + .toggle-knob::before { transform: translateX(24px); background: var(--rose); }
+/* tracker panels */
+.tracker-main { display: none; }
+.tracker-main.open { display: block; animation: fadeSlide 0.35s ease; }
+@keyframes fadeSlide { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.tracker-nav { display: flex; gap: 0; background: var(--bg2); border-radius: 14px; padding: 3px; margin-bottom: 16px; }
+.t-nav-btn { flex: 1; text-align: center; padding: 9px 6px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border-radius: 11px; transition: all 0.18s; border: none; background: none; font-family: var(--font); }
+.t-nav-btn.active { background: var(--surface); color: var(--blush); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.t-panel { display: none; }
+.t-panel.active { display: block; }
+/* tracker cards */
+.t-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); padding: 18px; margin-bottom: 12px; }
+.t-card-title { font-size: 13px; font-weight: 700; color: var(--blush); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+.t-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.t-lbl { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.t-in { background: var(--bg2); border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 14px; font-family: var(--font); font-size: 14px; font-weight: 500; color: var(--text); outline: none; width: 100%; transition: border-color 0.2s; }
+.t-in:focus { border-color: var(--rose); }
+.t-sel { background: var(--bg2); border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 14px; font-family: var(--font); font-size: 13px; font-weight: 500; color: var(--text); outline: none; width: 100%; -webkit-appearance: none; }
+.t-sel:focus { border-color: var(--rose); }
+.t-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.t-row.three { grid-template-columns: 1fr 1fr 1fr; }
+/* chips */
+.t-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.t-chip { padding: 6px 13px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border); color: var(--muted); transition: all 0.15s; background: var(--bg2); }
+.t-chip:active { transform: scale(0.96); }
+.t-chip.sel-rose { background: var(--rose-l); border-color: var(--rose); color: var(--rose); }
+.t-chip.sel-sage { background: var(--sage-l); border-color: var(--sage); color: var(--sage); }
+.t-chip.sel-amber { background: var(--amber-l); border-color: var(--amber); color: var(--amber); }
+.t-chip.sel-lav { background: var(--lav-l); border-color: var(--lavender); color: var(--lavender); }
+/* slider */
+.t-slider-row { display: flex; align-items: center; gap: 12px; }
+.t-range { flex: 1; accent-color: var(--rose); }
+.t-range-val { font-size: 17px; font-weight: 700; color: var(--rose); min-width: 26px; text-align: right; }
+/* cycle grid */
+.cycle-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 5px; margin: 10px 0; }
+.cycle-day { aspect-ratio:1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); color: var(--muted); transition: all 0.12s; }
+.cycle-day.period { background: var(--rose); color: #fff; border-color: var(--rose); }
+.cycle-day.today-d { border-color: var(--blush); color: var(--blush); font-weight: 800; }
+.cycle-day:hover { border-color: var(--border2); color: var(--text); }
+/* stats row */
+.t-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px; }
+.t-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 13px; padding: 10px; text-align: center; }
+.t-stat-val { font-size: 20px; font-weight: 700; color: var(--rose); line-height: 1; }
+.t-stat-lbl { font-size: 9px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px; }
+/* progress */
+.t-prog-wrap { margin-bottom: 9px; }
+.t-prog-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+.t-prog-bar { height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.t-prog-fill { height: 100%; border-radius: 3px; transition: width 0.6s; }
+/* log list */
+.t-log { display: flex; flex-direction: column; gap: 7px; }
+.t-log-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 11px 13px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.t-log-del { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; line-height: 1; padding: 2px 4px; }
+.t-log-del:hover { color: var(--rose); }
+.t-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px; }
+.t-badge-rose { background: var(--rose-l); color: var(--rose); }
+.t-badge-sage { background: var(--sage-l); color: var(--sage); }
+.t-badge-amber { background: var(--amber-l); color: var(--amber); }
+.t-badge-lav { background: var(--lav-l); color: var(--lavender); }
+/* save btn */
+.t-save-btn { width: 100%; background: linear-gradient(135deg,var(--rose),var(--rose-d)); color: #fff; border: none; border-radius: 13px; padding: 13px; font-family: var(--font); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 4px; }
+.t-save-btn:hover { box-shadow: 0 4px 20px rgba(232,96,122,0.4); }
+.t-save-btn:active { transform: scale(0.98); }
+/* water */
+.water-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.water-btn { background: var(--lav-l); border: 1.5px solid var(--lavender); border-radius: 20px; padding: 6px 12px; font-family: var(--font); font-size: 12px; font-weight: 600; color: var(--lavender); cursor: pointer; transition: all 0.15s; }
+.water-btn:hover { background: rgba(184,160,216,0.22); }
+/* bar chart */
+.t-bar-chart { display: flex; gap: 5px; align-items: flex-end; height: 72px; margin-bottom: 5px; }
+.t-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.t-bar-fill { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.5s; min-height: 2px; }
+.t-bar-lbl { font-size: 9px; color: var(--muted); font-weight: 700; }
+/* empty */
+.t-empty { text-align: center; padding: 24px 0; color: var(--muted); font-size: 13px; }
+.t-empty span { font-size: 28px; display: block; margin-bottom: 6px; opacity: 0.5; }
+/* toast */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--surface2); border: 1px solid var(--border2); color: var(--text); font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 30px; z-index: 999; pointer-events: none; transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+/* FOOTER */
+footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); }
+footer a { color: var(--rose); text-decoration: none; }
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+/* responsive */
+@media(max-width: 480px) { .t-row { grid-template-columns: 1fr; } .t-row.three { grid-template-columns: 1fr 1fr; } nav { padding: 0 14px; } .nav-links { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🌸 PCOD <span>Guide</span></div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="scrollTo('#what')">What is PCOD</button>
+    <button class="nav-link" onclick="scrollTo('#symptoms')">Symptoms</button>
+    <button class="nav-link" onclick="scrollTo('#insulin')">Insulin</button>
+    <button class="nav-link" onclick="scrollTo('#dosdonts')">Do's & Don'ts</button>
+    <button class="nav-link" onclick="scrollTo('#tracker')">Tracker</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+  <div class="hero-eyebrow">HealthLoop · PCOD Resource</div>
+  <h1 class="hero-title">Understanding <em>PCOD</em> — and living well with it</h1>
+  <p class="hero-sub">A clear, honest guide to Polycystic Ovarian Disease — what it is, how it affects your body, and what you can do every day to feel better.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('what').scrollIntoView({behavior:'smooth'})">Read the guide</button>
+    <button class="btn-secondary" onclick="document.getElementById('tracker').scrollIntoView({behavior:'smooth'})">Open tracker ↓</button>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- WHAT IS PCOD -->
+<section id="what">
+  <div class="section-tag">What is PCOD</div>
+  <h2 class="section-title">A hormonal condition, <em>not a life sentence</em></h2>
+  <p class="section-lead">Polycystic Ovarian Disease (PCOD) — also called PCOS — is a hormonal disorder affecting 1 in 10 women of reproductive age. The ovaries produce more androgens (male hormones) than usual, which can disrupt ovulation and cause small cysts to form. It is manageable, and many women live full, healthy lives with the right information and habits.</p>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-ico">🧬</div>
+      <div class="info-card-title">Hormonal imbalance</div>
+      <div class="info-card-body">Elevated androgens (like testosterone) interfere with the monthly release of eggs. This causes irregular or absent periods and affects fertility.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-ico">🫧</div>
+      <div class="info-card-title">Ovarian cysts</div>
+      <div class="info-card-body">Small fluid-filled follicles develop on the ovaries. Despite the name, these are not true cysts — they are immature egg follicles that didn't fully develop.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-ico">📊</div>
+      <div class="info-card-title">Metabolic effects</div>
+      <div class="info-card-body">PCOD is closely linked to insulin resistance, which affects how your body processes blood sugar. This is why weight management and diet have such a strong impact.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-ico">🌱</div>
+      <div class="info-card-title">Highly manageable</div>
+      <div class="info-card-body">Lifestyle changes — especially diet, exercise, and sleep — can dramatically reduce symptoms. Many women see improvement within weeks of consistent changes.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SYMPTOMS -->
+<section id="symptoms">
+  <div class="section-tag">Symptoms</div>
+  <h2 class="section-title">How PCOD <em>shows up</em></h2>
+  <p class="section-lead">Symptoms vary widely between individuals. You may have all of these, some of them, or just one. The presence of 2 of the 3 main criteria (irregular periods, high androgens, polycystic ovaries on scan) is typically enough for a diagnosis.</p>
+  <div class="symptom-list">
+    <div class="symptom-item"><div class="symptom-ico">🩸</div><div class="symptom-text"><strong>Irregular periods</strong>Cycles longer than 35 days, very light, very heavy, or absent periods</div></div>
+    <div class="symptom-item"><div class="symptom-ico">⚖️</div><div class="symptom-text"><strong>Weight gain</strong>Especially around the abdomen, even with controlled diet</div></div>
+    <div class="symptom-item"><div class="symptom-ico">🌿</div><div class="symptom-text"><strong>Excess hair growth</strong>On the face, chest, back or abdomen (hirsutism)</div></div>
+    <div class="symptom-item"><div class="symptom-ico">✨</div><div class="symptom-text"><strong>Acne & oily skin</strong>Particularly along the jaw, chin, and neck</div></div>
+    <div class="symptom-item"><div class="symptom-ico">💇</div><div class="symptom-text"><strong>Hair thinning</strong>Scalp hair loss or thinning, similar to male pattern baldness</div></div>
+    <div class="symptom-item"><div class="symptom-ico">🌑</div><div class="symptom-text"><strong>Dark skin patches</strong>Darkening around the neck, groin, under breasts (acanthosis nigricans)</div></div>
+    <div class="symptom-item"><div class="symptom-ico">😓</div><div class="symptom-text"><strong>Fatigue</strong>Persistent tiredness, especially after eating carb-heavy meals</div></div>
+    <div class="symptom-item"><div class="symptom-ico">🧠</div><div class="symptom-text"><strong>Brain fog & mood</strong>Difficulty concentrating, anxiety, depression — hormones affect the brain too</div></div>
+    <div class="symptom-item"><div class="symptom-ico">🤰</div><div class="symptom-text"><strong>Fertility challenges</strong>Irregular ovulation makes natural conception harder, but not impossible</div></div>
+    <div class="symptom-item"><div class="symptom-ico">💤</div><div class="symptom-text"><strong>Sleep issues</strong>Insomnia or poor sleep quality, sometimes linked to sleep apnoea</div></div>
+    <div class="symptom-item"><div class="symptom-ico">🍬</div><div class="symptom-text"><strong>Sugar cravings</strong>Intense cravings, especially late afternoon — a classic sign of insulin resistance</div></div>
+    <div class="symptom-item"><div class="symptom-ico">🫄</div><div class="symptom-text"><strong>Bloating</strong>Abdominal bloating, particularly after meals high in refined carbs</div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INSULIN RESISTANCE -->
+<section id="insulin">
+  <div class="section-tag">Insulin Resistance</div>
+  <h2 class="section-title">The <em>insulin connection</em> — why it matters</h2>
+  <p class="section-lead">Up to 70% of women with PCOD have insulin resistance. Understanding this mechanism is key to understanding why diet and exercise have such a powerful impact on PCOD management.</p>
+  <div class="insulin-flow">
+    <div class="insulin-step">
+      <div class="insulin-num">1</div>
+      <div class="insulin-content"><h4>You eat carbohydrates</h4><p>Blood glucose rises. Your pancreas releases insulin to move glucose from blood into cells for energy.</p></div>
+    </div>
+    <div class="insulin-step">
+      <div class="insulin-num">2</div>
+      <div class="insulin-content"><h4>Cells stop responding properly</h4><p>In insulin resistance, cells become "deaf" to insulin's signal. The pancreas compensates by producing even more insulin.</p></div>
+    </div>
+    <div class="insulin-step">
+      <div class="insulin-num">3</div>
+      <div class="insulin-content"><h4>High insulin triggers more androgens</h4><p>Excess insulin stimulates the ovaries to produce more testosterone. This worsens PCOD symptoms — more acne, more hair growth, more irregular cycles.</p></div>
+    </div>
+    <div class="insulin-step">
+      <div class="insulin-num">4</div>
+      <div class="insulin-content"><h4>Fat storage increases</h4><p>High insulin is a fat-storage hormone. This makes weight loss harder, particularly around the abdomen — even when eating less.</p></div>
+    </div>
+    <div class="insulin-step">
+      <div class="insulin-num">5</div>
+      <div class="insulin-content"><h4>The cycle continues</h4><p>More weight, more insulin resistance, more androgens, worse symptoms. Breaking this cycle through diet and exercise is the most effective intervention available.</p></div>
+    </div>
+  </div>
+  <div class="insulin-highlight">
+    <p>💡 <strong>The good news:</strong> Insulin resistance responds quickly to lifestyle changes. Even a <strong>5–10% reduction in body weight</strong> can significantly improve insulin sensitivity, restore ovulation, and reduce androgen levels. You don't need to reach an "ideal" weight — small consistent changes create real hormonal change.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- DO'S AND DON'TS -->
+<section id="dosdonts">
+  <div class="section-tag">Do's & Don'ts</div>
+  <h2 class="section-title">What actually <em>helps</em></h2>
+  <p class="section-lead">These aren't rigid rules — they are evidence-based guidelines that reduce insulin resistance, balance hormones, and ease symptoms. Small, consistent choices matter more than dramatic changes.</p>
+  <div class="dos-donts" style="margin-bottom:20px">
+    <div class="do-card">
+      <div class="dos-donts-title">✅ Do</div>
+      <div class="dd-list">
+        <div class="dd-item">Eat low-glycemic foods — brown rice, oats, lentils, legumes, most vegetables</div>
+        <div class="dd-item">Prioritise protein at every meal — eggs, fish, chicken, paneer, dal</div>
+        <div class="dd-item">Do strength training 2–3 times a week — builds muscle, improves insulin sensitivity</div>
+        <div class="dd-item">Walk after meals — even 10–15 minutes lowers blood glucose spikes</div>
+        <div class="dd-item">Sleep 7–9 hours — poor sleep raises cortisol and worsens insulin resistance</div>
+        <div class="dd-item">Manage stress actively — yoga, breathing, journalling, therapy</div>
+        <div class="dd-item">Eat fiber-rich foods — slows glucose absorption, feeds gut bacteria</div>
+        <div class="dd-item">Stay hydrated — 2–2.5L water daily</div>
+        <div class="dd-item">Consider inositol (Myo + D-Chiro) — improves insulin sensitivity in PCOD</div>
+        <div class="dd-item">Track your cycle, symptoms and food — patterns reveal your personal triggers</div>
+      </div>
+    </div>
+    <div class="dont-card">
+      <div class="dos-donts-title">🚫 Don't</div>
+      <div class="dd-list">
+        <div class="dd-item">Skip meals — causes blood sugar crashes and increases cortisol</div>
+        <div class="dd-item">Eat refined carbs alone — white bread, white rice, naan, luchi without protein</div>
+        <div class="dd-item">Drink sugary drinks — soft drinks, packaged juices, sweetened lassi</div>
+        <div class="dd-item">Over-exercise with intense cardio only — can increase cortisol and worsen symptoms</div>
+        <div class="dd-item">Eat late at night — disrupts blood sugar and sleep quality</div>
+        <div class="dd-item">Ignore stress — chronic stress worsens every PCOD symptom</div>
+        <div class="dd-item">Crash diet — very low calorie diets spike cortisol and worsen hormonal imbalance</div>
+        <div class="dd-item">Consume excess dairy if it triggers symptoms — some women find it worsens acne</div>
+        <div class="dd-item">Self-medicate hormones — always work with a doctor for metformin, birth control, etc.</div>
+        <div class="dd-item">Compare your journey — PCOD presents differently for everyone</div>
+      </div>
+    </div>
+  </div>
+  <div class="info-card" style="margin-bottom:0">
+    <div class="info-card-ico">🍽️</div>
+    <div class="info-card-title">The PCOD plate principle</div>
+    <div class="info-card-body">At each meal: fill <strong>½ your plate with non-starchy vegetables</strong>, <strong>¼ with lean protein</strong>, and <strong>¼ with complex carbs</strong> (not white rice alone). Always pair carbs with protein or fat to slow glucose absorption. Never eat carbs on an empty stomach.</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TRACKER -->
+<section id="tracker">
+  <div class="section-tag">Personal Tracker</div>
+  <h2 class="section-title">Your daily <em>PCOD log</em></h2>
+  <p class="section-lead">Enable the tracker below to log your cycle, symptoms, meals, water and mood. All data stays privately on your device — nothing is sent anywhere. You can disable it anytime.</p>
+
+  <div class="tracker-toggle-card">
+    <div class="tracker-header">
+      <div class="tracker-title-group">
+        <h3>🌸 PCOD Daily Tracker</h3>
+        <p id="tracker-status-text">Enable to start tracking your symptoms, cycle and wellness</p>
+      </div>
+      <div class="toggle-pill">
+        <span class="toggle-lbl" id="toggle-lbl">Off</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="tracker-toggle" onchange="toggleTracker(this.checked)">
+          <span class="toggle-knob"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKER MAIN -->
+  <div class="tracker-main" id="tracker-main">
+    <div class="tracker-nav">
+      <button class="t-nav-btn active" id="tnav-today" onclick="switchTTab('today')">Today</button>
+      <button class="t-nav-btn" id="tnav-cycle" onclick="switchTTab('cycle')">🩸 Cycle</button>
+      <button class="t-nav-btn" id="tnav-symptoms" onclick="switchTTab('symptoms')">Symptoms</button>
+      <button class="t-nav-btn" id="tnav-trends" onclick="switchTTab('trends')">Trends</button>
+    </div>
+
+    <!-- TODAY -->
+    <div class="t-panel active" id="tpanel-today">
+      <div class="t-card">
+        <div class="t-card-title">📋 Overview — <span id="t-today-date">today</span></div>
+        <div class="t-stats">
+          <div class="t-stat"><div class="t-stat-val" id="ts-energy">—</div><div class="t-stat-lbl">Energy</div></div>
+          <div class="t-stat"><div class="t-stat-val" id="ts-sleep">—</div><div class="t-stat-lbl">Sleep h</div></div>
+          <div class="t-stat"><div class="t-stat-val" id="ts-stress">—</div><div class="t-stat-lbl">Stress</div></div>
+        </div>
+        <div class="t-prog-wrap">
+          <div class="t-prog-labels"><span>💧 Water</span><span id="t-water-lbl">0 / 2L</span></div>
+          <div class="t-prog-bar"><div class="t-prog-fill" id="t-water-bar" style="width:0%;background:var(--lavender)"></div></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">💧 Water intake</div>
+        <div class="water-row">
+          <button class="water-btn" onclick="quickWater(0.25)">+250ml</button>
+          <button class="water-btn" onclick="quickWater(0.5)">+500ml</button>
+          <button class="water-btn" onclick="quickWater(1)">+1L</button>
+          <span style="font-size:12px;color:var(--muted);font-weight:500">Today: <strong id="t-water-display" style="color:var(--lavender)">0L</strong></span>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">🥗 Log meal</div>
+        <div class="t-row" style="margin-bottom:10px">
+          <div class="t-field"><div class="t-lbl">Meal type</div>
+            <select class="t-sel" id="t-m-type"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option></select>
+          </div>
+          <div class="t-field"><div class="t-lbl">Glycemic load</div>
+            <select class="t-sel" id="t-m-gi"><option value="">Unknown</option><option value="Low GI">Low GI ✅</option><option value="Medium GI">Medium GI ⚠️</option><option value="High GI">High GI 🚫</option></select>
+          </div>
+        </div>
+        <div class="t-field"><div class="t-lbl">What did you eat?</div><input class="t-in" id="t-m-food" type="text" placeholder="e.g. Dal khichuri, egg, salad"></div>
+        <div class="t-row three" style="margin-bottom:10px">
+          <div class="t-field"><div class="t-lbl">Calories</div><input class="t-in" id="t-m-cal" type="number" placeholder="kcal" min="0"></div>
+          <div class="t-field"><div class="t-lbl">Protein (g)</div><input class="t-in" id="t-m-prot" type="number" placeholder="g" min="0"></div>
+          <div class="t-field"><div class="t-lbl">Carbs (g)</div><input class="t-in" id="t-m-carb" type="number" placeholder="g" min="0"></div>
+        </div>
+        <div class="t-field"><div class="t-lbl">How did it feel?</div>
+          <div class="t-chips" id="t-m-feel">
+            <span class="t-chip" data-sel="sel-sage" onclick="tChipMulti(this)">Energized</span>
+            <span class="t-chip" data-sel="sel-sage" onclick="tChipMulti(this)">Satisfied</span>
+            <span class="t-chip" data-sel="sel-amber" onclick="tChipMulti(this)">Bloated</span>
+            <span class="t-chip" data-sel="sel-amber" onclick="tChipMulti(this)">Sluggish</span>
+            <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Cravings</span>
+            <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Nauseous</span>
+          </div>
+        </div>
+        <button class="t-save-btn" onclick="saveMeal()">Log Meal</button>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">🍽️ Today's meals</div>
+        <div class="t-log" id="t-meal-log"><div class="t-empty"><span>🥗</span>No meals logged yet</div></div>
+      </div>
+    </div>
+
+    <!-- CYCLE -->
+    <div class="t-panel" id="tpanel-cycle">
+      <div class="t-card">
+        <div class="t-card-title">🩸 Mark today's period</div>
+        <div class="t-chips" id="t-flow-chips" style="margin-bottom:14px">
+          <span class="t-chip" onclick="selectFlow(this,'No flow')">No flow</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="selectFlow(this,'Spotting')">Spotting</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="selectFlow(this,'Light')">Light</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="selectFlow(this,'Medium')">Medium</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="selectFlow(this,'Heavy')">Heavy</span>
+        </div>
+        <div class="t-lbl" style="margin-bottom:8px">LH / Ovulation test</div>
+        <div class="t-chips" id="t-lh-chips" style="margin-bottom:14px">
+          <span class="t-chip" onclick="selectLH(this,'Not tested')">Not tested</span>
+          <span class="t-chip" data-sel="sel-sage" onclick="selectLH(this,'Positive')">LH+ ✅</span>
+          <span class="t-chip" data-sel="sel-amber" onclick="selectLH(this,'Almost')">Almost+</span>
+          <span class="t-chip" onclick="selectLH(this,'Negative')">Negative</span>
+        </div>
+        <div class="t-lbl" style="margin-bottom:8px">Cervical mucus</div>
+        <div class="t-chips" id="t-cm-chips" style="margin-bottom:14px">
+          <span class="t-chip" onclick="selectCM(this,'Dry')">Dry</span>
+          <span class="t-chip" onclick="selectCM(this,'Sticky')">Sticky</span>
+          <span class="t-chip" data-sel="sel-amber" onclick="selectCM(this,'Creamy')">Creamy</span>
+          <span class="t-chip" data-sel="sel-sage" onclick="selectCM(this,'Watery')">Watery</span>
+          <span class="t-chip" data-sel="sel-sage" onclick="selectCM(this,'Egg white')">Egg white</span>
+        </div>
+        <button class="t-save-btn" onclick="saveCycle()">Save Cycle Data</button>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">📅 Last 35 days</div>
+        <div class="cycle-grid" id="t-cycle-grid"></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:11px;color:var(--muted)">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--rose);vertical-align:middle;margin-right:4px"></span>Period</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--sage-l);border:1px solid var(--sage);vertical-align:middle;margin-right:4px"></span>LH Positive</span>
+        </div>
+        <div id="t-cycle-stats" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <!-- SYMPTOMS -->
+    <div class="t-panel" id="tpanel-symptoms">
+      <div class="t-card">
+        <div class="t-card-title">🌡️ Physical symptoms</div>
+        <div class="t-chips" id="t-physical">
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Fatigue</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Bloating</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Cramps</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Headache</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Acne</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Hair loss</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Hirsutism</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Pelvic pain</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Insomnia</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Nausea</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Joint pain</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Hot flashes</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Sugar cravings</span>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">😌 Mood</div>
+        <div class="t-chips" id="t-mood">
+          <span class="t-chip" data-sel="sel-sage" onclick="tChipMulti(this)">Happy</span>
+          <span class="t-chip" data-sel="sel-sage" onclick="tChipMulti(this)">Calm</span>
+          <span class="t-chip" data-sel="sel-sage" onclick="tChipMulti(this)">Focused</span>
+          <span class="t-chip" data-sel="sel-amber" onclick="tChipMulti(this)">Anxious</span>
+          <span class="t-chip" data-sel="sel-amber" onclick="tChipMulti(this)">Irritable</span>
+          <span class="t-chip" data-sel="sel-amber" onclick="tChipMulti(this)">Sad</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Brain fog</span>
+          <span class="t-chip" data-sel="sel-rose" onclick="tChipMulti(this)">Low motivation</span>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">📊 Vitals</div>
+        <div class="t-field"><div class="t-lbl">Energy (1 = exhausted, 10 = great)</div>
+          <div class="t-slider-row"><input type="range" class="t-range" id="t-energy" min="1" max="10" value="5" oninput="document.getElementById('t-energy-val').textContent=this.value"><div class="t-range-val" id="t-energy-val">5</div></div>
+        </div>
+        <div class="t-field"><div class="t-lbl">Sleep last night (hours)</div>
+          <div class="t-slider-row"><input type="range" class="t-range" id="t-sleep" min="0" max="12" step="0.5" value="7" oninput="document.getElementById('t-sleep-val').textContent=this.value"><div class="t-range-val" id="t-sleep-val">7</div></div>
+        </div>
+        <div class="t-field"><div class="t-lbl">Stress (1 = calm, 10 = very stressed)</div>
+          <div class="t-slider-row"><input type="range" class="t-range" id="t-stress" min="1" max="10" value="4" oninput="document.getElementById('t-stress-val').textContent=this.value"><div class="t-range-val" id="t-stress-val">4</div></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">💊 Medications & Supplements taken today</div>
+        <div class="t-chips" id="t-meds">
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Metformin</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Inositol</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Magnesium</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Vitamin D</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Omega-3</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Iron</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Zinc</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Birth control</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Spironolactone</span>
+          <span class="t-chip" data-sel="sel-lav" onclick="tChipMulti(this)">Clomiphene</span>
+        </div>
+        <div class="t-field" style="margin-top:12px"><div class="t-lbl">Notes</div>
+          <textarea class="t-in" id="t-s-note" style="min-height:60px;resize:vertical" placeholder="e.g. Skin clearer today, more energy after walk..."></textarea>
+        </div>
+        <button class="t-save-btn" onclick="saveSymptoms()">Save Symptoms</button>
+      </div>
+      <div class="t-card" id="t-symptoms-display-card">
+        <div class="t-card-title">📋 Logged today</div>
+        <div id="t-symptoms-display"><div class="t-empty"><span>🌿</span>No symptoms logged yet</div></div>
+      </div>
+    </div>
+
+    <!-- TRENDS -->
+    <div class="t-panel" id="tpanel-trends">
+      <div class="t-card">
+        <div class="t-card-title">💤 Sleep trend (7 nights)</div>
+        <div class="t-bar-chart" id="t-sleep-chart"></div>
+        <div style="display:flex;gap:5px" id="t-sleep-labels"></div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">😤 Stress trend (7 days)</div>
+        <div class="t-bar-chart" id="t-stress-chart"></div>
+        <div style="display:flex;gap:5px" id="t-stress-labels"></div>
+      </div>
+      <div class="t-card">
+        <div class="t-card-title">📋 Top symptoms (30 days)</div>
+        <div id="t-sym-freq"></div>
+      </div>
+      <div class="t-card" style="border-color:rgba(232,96,122,0.2)">
+        <div class="t-card-title">⚙️ Tracker settings</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Disable the tracker to hide it. Your data stays saved on this device.</p>
+        <button onclick="toggleTracker(false);document.getElementById('tracker-toggle').checked=false" style="width:100%;background:var(--rose-l);border:1px solid rgba(232,96,122,0.25);color:var(--rose);border-radius:12px;padding:12px;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer">Disable Tracker</button>
+      </div>
+    </div>
+  </div><!-- /tracker-main -->
+</section>
+
+<footer>
+  <p>Made with 🌸 as part of <a href="#">HealthLoop</a> · All tracker data stays private on your device · Not medical advice — always consult your doctor</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ─────────────────────────────────────
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let trackerEnabled = localStorage.getItem('pcod_enabled') === '1';
+let activeTab = 'today';
+let flowVal = '', lhVal = '', cmVal = '';
+
+function tKey(d) { return (d || new Date()).toISOString().slice(0,10); }
+function tGet(k) { try { return JSON.parse(localStorage.getItem('pcod2_'+k)||'null'); } catch { return null; } }
+function tSet(k,v) { localStorage.setItem('pcod2_'+k, JSON.stringify(v)); }
+function today() { const d=new Date(); d.setHours(0,0,0,0); return d; }
+
+// ─── NAV ───────────────────────────────────────
+function scrollTo(id) { document.querySelector(id).scrollIntoView({behavior:'smooth'}); }
+window.scrollTo = function(id) { if(typeof id==='string') document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); else window.scrollTo.apply(window, arguments); };
+
+// ─── TRACKER TOGGLE ────────────────────────────
+function toggleTracker(on) {
+  trackerEnabled = on;
+  localStorage.setItem('pcod_enabled', on ? '1' : '0');
+  document.getElementById('tracker-main').classList.toggle('open', on);
+  document.getElementById('toggle-lbl').textContent = on ? 'On' : 'Off';
+  document.getElementById('tracker-status-text').textContent = on
+    ? 'Tracker active — log your symptoms, cycle and wellness'
+    : 'Enable to start tracking your symptoms, cycle and wellness';
+  if (on) { renderAll(); showToast('🌸 Tracker enabled!'); }
+  else showToast('Tracker disabled — your data is kept');
+}
+window.toggleTracker = toggleTracker;
+
+// Init
+if (trackerEnabled) { document.getElementById('tracker-toggle').checked = true; toggleTracker(true); }
+document.getElementById('t-today-date').textContent = today().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+
+// ─── TABS ──────────────────────────────────────
+function switchTTab(tab) {
+  activeTab = tab;
+  ['today','cycle','symptoms','trends'].forEach(t => {
+    document.getElementById('tnav-'+t)?.classList.toggle('active', t===tab);
+    document.getElementById('tpanel-'+t)?.classList.toggle('active', t===tab);
+  });
+  renderAll();
+}
+window.switchTTab = switchTTab;
+
+// ─── CHIPS ─────────────────────────────────────
+function tChipMulti(el) {
+  const sel = el.dataset.sel || 'sel-rose';
+  const classes = ['sel-rose','sel-sage','sel-amber','sel-lav'];
+  if (classes.some(c => el.classList.contains(c))) {
+    classes.forEach(c => el.classList.remove(c));
+  } else { el.classList.add(sel); }
+}
+window.tChipMulti = tChipMulti;
+
+function getSelected(containerId) {
+  return [...document.querySelectorAll('#'+containerId+' .t-chip')].filter(c =>
+    ['sel-rose','sel-sage','sel-amber','sel-lav'].some(s => c.classList.contains(s))
+  ).map(c => c.textContent.trim());
+}
+
+function clearChips(containerId) {
+  document.querySelectorAll('#'+containerId+' .t-chip').forEach(c =>
+    c.classList.remove('sel-rose','sel-sage','sel-amber','sel-lav')
+  );
+}
+
+function selectFlow(el, val) {
+  flowVal = val;
+  clearChips('t-flow-chips');
+  if (val !== 'No flow') el.classList.add(el.dataset.sel || 'sel-rose');
+}
+function selectLH(el, val) { lhVal = val; clearChips('t-lh-chips'); el.classList.add(el.dataset.sel||'sel-sage'); }
+function selectCM(el, val) { cmVal = val; clearChips('t-cm-chips'); el.classList.add(el.dataset.sel||'sel-sage'); }
+window.selectFlow = selectFlow; window.selectLH = selectLH; window.selectCM = selectCM;
+
+// ─── WATER ─────────────────────────────────────
+function quickWater(amt) {
+  const k = 'water_'+tKey();
+  tSet(k, parseFloat(((tGet(k)||0)+amt).toFixed(2)));
+  renderToday(); showToast('💧 +'+(amt*1000)+'ml added');
+}
+window.quickWater = quickWater;
+
+// ─── RENDER TODAY ──────────────────────────────
+function renderToday() {
+  const s = tGet('symptoms_'+tKey()) || {};
+  const water = tGet('water_'+tKey()) || 0;
+  document.getElementById('ts-energy').textContent = s.energy || '—';
+  document.getElementById('ts-sleep').textContent  = s.sleep  || '—';
+  document.getElementById('ts-stress').textContent = s.stress || '—';
+  document.getElementById('t-water-display').textContent = water.toFixed(1)+'L';
+  document.getElementById('t-water-lbl').textContent = water.toFixed(1)+' / 2L';
+  document.getElementById('t-water-bar').style.width = Math.min(100,water/2*100)+'%';
+}
+
+// ─── MEALS ─────────────────────────────────────
+function saveMeal() {
+  const food = document.getElementById('t-m-food').value.trim();
+  if (!food) { showToast('Enter what you ate'); return; }
+  const now = new Date();
+  const entry = {
+    type: document.getElementById('t-m-type').value,
+    food, gi: document.getElementById('t-m-gi').value,
+    cal: parseInt(document.getElementById('t-m-cal').value)||0,
+    prot: parseInt(document.getElementById('t-m-prot').value)||0,
+    carb: parseInt(document.getElementById('t-m-carb').value)||0,
+    feel: getSelected('t-m-feel'),
+    time: now.getHours()+':'+String(now.getMinutes()).padStart(2,'0'),
+    id: Date.now()
+  };
+  const k = 'meals_'+tKey();
+  const meals = tGet(k)||[];
+  meals.push(entry);
+  tSet(k, meals);
+  document.getElementById('t-m-food').value = '';
+  ['t-m-cal','t-m-prot','t-m-carb'].forEach(id => document.getElementById(id).value = '');
+  clearChips('t-m-feel');
+  showToast('🥗 Meal logged!');
+  renderMeals();
+}
+window.saveMeal = saveMeal;
+
+function renderMeals() {
+  const meals = tGet('meals_'+tKey()) || [];
+  const el = document.getElementById('t-meal-log');
+  if (!meals.length) { el.innerHTML='<div class="t-empty"><span>🥗</span>No meals logged yet</div>'; return; }
+  const clr = {Breakfast:'t-badge-amber',Lunch:'t-badge-sage',Dinner:'t-badge-rose',Snack:'t-badge-lav'};
+  el.innerHTML = meals.map(m=>`<div class="t-log-item">
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:600"><span class="t-badge ${clr[m.type]||'t-badge-rose'}">${m.type}</span> ${m.food}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px">${m.time}${m.cal?' · '+m.cal+'kcal':''}${m.prot?' · P:'+m.prot+'g':''}${m.gi?' · '+m.gi:''}${m.feel&&m.feel.length?' · '+m.feel.join(', '):''}</div>
+    </div>
+    <button class="t-log-del" onclick="deleteMeal(${m.id})">×</button>
+  </div>`).join('');
+}
+
+function deleteMeal(id) {
+  const k = 'meals_'+tKey();
+  tSet(k,(tGet(k)||[]).filter(m=>m.id!==id));
+  renderMeals();
+}
+window.deleteMeal = deleteMeal;
+
+// ─── CYCLE ─────────────────────────────────────
+function saveCycle() {
+  if (!flowVal && !lhVal && !cmVal) { showToast('Select at least one option'); return; }
+  tSet('cycle_'+tKey(), {flow:flowVal, lh:lhVal, cm:cmVal});
+  showToast('🩸 Cycle data saved!');
+  renderCycle();
+}
+window.saveCycle = saveCycle;
+
+function renderCycle() {
+  const grid = document.getElementById('t-cycle-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const now = today();
+  const periodDays = [];
+  for (let i=34;i>=0;i--) {
+    const d = new Date(now); d.setDate(now.getDate()-i);
+    const key = d.toISOString().slice(0,10);
+    const c = tGet('cycle_'+key)||{};
+    const hasPeriod = c.flow && c.flow!=='No flow';
+    const hasLH = c.lh==='Positive';
+    if (hasPeriod) periodDays.push(d.getTime());
+    const div = document.createElement('div');
+    div.className='cycle-day';
+    div.textContent = d.getDate();
+    if (hasPeriod) div.classList.add('period');
+    if (hasLH && !hasPeriod) { div.style.background='rgba(125,196,160,0.15)'; div.style.borderColor='var(--sage)'; div.style.color='var(--sage)'; }
+    if (d.getTime()===now.getTime()) div.classList.add('today-d');
+    div.title = key+(c.flow?' · '+c.flow:'')+(c.lh&&c.lh!=='Not tested'?' · LH: '+c.lh:'');
+    grid.appendChild(div);
+  }
+  const statsEl = document.getElementById('t-cycle-stats');
+  if (periodDays.length >= 2) {
+    const sorted = [...periodDays].sort((a,b)=>a-b);
+    const gaps = [];
+    for (let i=1;i<sorted.length;i++) gaps.push((sorted[i]-sorted[i-1])/86400000);
+    const avg = Math.round(gaps.reduce((a,b)=>a+b,0)/gaps.length);
+    const last = new Date(sorted[sorted.length-1]);
+    const next = new Date(last); next.setDate(last.getDate()+avg);
+    const ov   = new Date(next); ov.setDate(next.getDate()-14);
+    statsEl.innerHTML = `<div class="t-stats">
+      <div class="t-stat"><div class="t-stat-val">${avg}</div><div class="t-stat-lbl">Avg cycle</div></div>
+      <div class="t-stat"><div class="t-stat-val" style="font-size:13px">${next.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div><div class="t-stat-lbl">Next period</div></div>
+      <div class="t-stat"><div class="t-stat-val" style="font-size:13px">${ov.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div><div class="t-stat-lbl">Ovulation est.</div></div>
+    </div><p style="font-size:11px;color:var(--muted);margin-top:8px">Note: PCOD cycles are often irregular — these estimates are approximate.</p>`;
+  } else { statsEl.innerHTML = '<p style="font-size:12px;color:var(--muted)">Log 2+ periods to see cycle statistics.</p>'; }
+}
+
+// ─── SYMPTOMS ──────────────────────────────────
+function saveSymptoms() {
+  const data = {
+    physical: getSelected('t-physical'),
+    mood:     getSelected('t-mood'),
+    meds:     getSelected('t-meds'),
+    energy:   document.getElementById('t-energy').value,
+    sleep:    document.getElementById('t-sleep').value,
+    stress:   document.getElementById('t-stress').value,
+    note:     document.getElementById('t-s-note').value.trim(),
+  };
+  tSet('symptoms_'+tKey(), data);
+  showToast('🌿 Symptoms saved!');
+  renderSymptoms();
+  renderToday();
+}
+window.saveSymptoms = saveSymptoms;
+
+function renderSymptoms() {
+  const s = tGet('symptoms_'+tKey());
+  const el = document.getElementById('t-symptoms-display');
+  if (!s) { el.innerHTML='<div class="t-empty"><span>🌿</span>No symptoms logged yet</div>'; return; }
+  el.innerHTML = `<div style="display:flex;flex-direction:column;gap:9px;padding:2px 0">
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <span class="t-badge t-badge-rose">Energy ${s.energy}/10</span>
+      <span class="t-badge t-badge-lav">Sleep ${s.sleep}h</span>
+      <span class="t-badge t-badge-amber">Stress ${s.stress}/10</span>
+    </div>
+    ${s.physical&&s.physical.length?`<div style="font-size:12px;color:var(--text2)"><strong style="color:var(--blush)">Physical:</strong> ${s.physical.join(', ')}</div>`:''}
+    ${s.mood&&s.mood.length?`<div style="font-size:12px;color:var(--text2)"><strong style="color:var(--blush)">Mood:</strong> ${s.mood.join(', ')}</div>`:''}
+    ${s.meds&&s.meds.length?`<div style="font-size:12px;color:var(--text2)"><strong style="color:var(--lavender)">Meds:</strong> ${s.meds.join(', ')}</div>`:''}
+    ${s.note?`<div style="font-size:12px;font-style:italic;color:var(--muted)">${s.note}</div>`:''}
+  </div>`;
+}
+
+// ─── TRENDS ────────────────────────────────────
+function renderTrends() {
+  const sleepD=[],stressD=[],labels=[];
+  for (let i=6;i>=0;i--) {
+    const d = new Date(); d.setDate(d.getDate()-i); d.setHours(0,0,0,0);
+    const s = tGet('symptoms_'+d.toISOString().slice(0,10))||{};
+    sleepD.push(parseFloat(s.sleep)||0);
+    stressD.push(parseInt(s.stress)||0);
+    labels.push(DAYS[d.getDay()]);
+  }
+  drawBars('t-sleep-chart','t-sleep-labels',sleepD,labels,'var(--lavender)',12,'h');
+  drawBars('t-stress-chart','t-stress-labels',stressD,labels,'var(--rose)',10,'/10');
+
+  const freq={};
+  for (let i=0;i<30;i++) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const s = tGet('symptoms_'+d.toISOString().slice(0,10));
+    if (!s) continue;
+    [...(s.physical||[]),...(s.mood||[])].forEach(sym=>{ freq[sym]=(freq[sym]||0)+1; });
+  }
+  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const el = document.getElementById('t-sym-freq');
+  if (!sorted.length) { el.innerHTML='<div class="t-empty"><span>📋</span>No symptom data yet</div>'; return; }
+  el.innerHTML = sorted.map(([sym,cnt])=>`<div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:4px"><span>${sym}</span><span style="color:var(--muted)">${cnt}/30 days</span></div>
+    <div class="t-prog-bar"><div class="t-prog-fill" style="width:${Math.round(cnt/30*100)}%;background:var(--rose)"></div></div>
+  </div>`).join('');
+}
+
+function drawBars(chartId,labelId,data,labels,color,maxVal,unit) {
+  const el=document.getElementById(chartId), lel=document.getElementById(labelId);
+  if (!el||!lel) return;
+  const peak = maxVal||Math.max(...data,1);
+  el.innerHTML = data.map((v,i)=>`<div class="t-bar-col">
+    <div style="flex:1;display:flex;align-items:flex-end;width:100%">
+      <div class="t-bar-fill" style="background:${color};height:${peak>0?Math.round(v/peak*100):0}%;width:100%;opacity:0.85" title="${labels[i]}: ${v}${unit}"></div>
+    </div>
+  </div>`).join('');
+  lel.innerHTML = labels.map(l=>`<div style="flex:1;text-align:center;font-size:9px;color:var(--muted);font-weight:700">${l}</div>`).join('');
+}
+
+// ─── RENDER ALL ────────────────────────────────
+function renderAll() {
+  if (activeTab==='today')    { renderToday(); renderMeals(); }
+  if (activeTab==='cycle')    renderCycle();
+  if (activeTab==='symptoms') renderSymptoms();
+  if (activeTab==='trends')   renderTrends();
+}
+
+// ─── TOAST ─────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─── SMOOTH SCROLL ─────────────────────────────
+document.querySelectorAll('.nav-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
